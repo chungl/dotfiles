@@ -1,0 +1,73 @@
+# git status
+alias gs="printf \"
+                                                              ____,
+                                                             /  / ]
+                                                            /  /  ]
+                               |      ,======--_________,. '  /___]_
+                               |_____/____|___)                    _ >
+                              <|          |        N-314PY ____===
+                               |\         |        ____----
+                               | \________|____----
+                                 ^         \\ 
+                                (_)        (_)
+\"; git status"
+
+# git diff
+alias gd="printf \"
+              ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+  \    \    \▕                               > ▌█████████████████████
+   \    \    ▕                               > ▌█████████████████████      ▋     ▛▀▀▀▀▀▌              ███████████
+⟩   ⟩    ⟩   ▕———>      —————>      —————>   > ▌                           ▋     ▌     ▌      ————————      ————————
+   /    /    ▕                               > ▌█████████████████████      ▀▀▀▀▀▀▀▀▀▀▀▀▘              ███████████
+  /    /    /▕                               > ▌█████████████████████
+              ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
+\"; git diff"
+
+# git diff cached
+alias gdc="printf \"
+▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+                                ▄▄▄▄               █████████████████████ ▌ <                              ▏/    /    /
+       ███████████              ▌   ▀▀▀▀▄▄▄▄▖      █████████████████████ ▌ <                              ▏    /    /
+    ————————      ————————                                               ▌ <   <—————      <—————      <——▏   ⟨    ⟨   ⟨
+       ███████████              ▛▀▀▀▀▚      ▌      █████████████████████ ▌ <                              ▏    \    \\ 
+                                ▌     ▚▄▄▄▄▄▌      █████████████████████ ▌ <                              ▏\    \    \\ 
+▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
+\"; git diff --cached"
+alias gpsu="git push --set-upstream origin \$(git rev-parse --abbrev-ref HEAD)"
+alias ghsh="git rev-parse --short HEAD"
+
+# git graph
+alias gg="git log --all --graph --tags --oneline"
+alias ggb="git log HEAD --graph --tags --oneline"
+
+# git diff file
+alias gdf="git log --follow -c -- "
+# git count lines
+alias gcl="git ls-files imports/* | xargs wc -l"
+
+# git branch list
+alias gbl="git branch --list --sort -creatordate --no-merged"
+
+# git checkout
+alias go="git checkout"
+alias gob="git checkout -b"
+
+# git pull
+alias gfp="git fetch && git pull"
+
+alias hosts="sudo vim /etc/hosts"
+alias resethosts="rm ~/.ssh/known_hosts"
+alias whichport="sudo lsof -i -P | grep LISTEN | grep "
+
+# git merge
+# git merge main/master
+alias gmm="git checkout \$([[ \"$PWD\" =~ \\/extension-page(\\/|$) ]] && echo \"main\" || echo \"master\") && 
+git fetch &&
+git pull && 
+git checkout - &&
+git merge --no-edit \$([[ \"$PWD\" =~ \\/extension-page(\\/|$) ]] && echo \"main\" || echo \"master\")"
+
+
+# alias
+alias al="vim ~/.casey_profile && source ~/.casey_profile"
+
