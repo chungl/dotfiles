@@ -1,0 +1,10 @@
+#!/bin/bash
+
+CONFIG_PATH=~/.gitconfig
+DOTFILES_PATH=~/dotfiles
+touch $CONFIG_PATH
+cat <<EOT >> $CONFIG_PATH
+[INCLUDE]
+	path = "$DOTFILES_PATH/.gitconfig" 
+EOT
+
