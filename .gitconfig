@@ -1,0 +1,11 @@
+[user]
+	email = cmhungler@gmail.com
+	name = Casey Hungler
+[init]
+	defaultBranch = main
+[core]
+	editor = vim
+[push]
+	autoSetupRemote = true
+[pull]
+	rebase = false
