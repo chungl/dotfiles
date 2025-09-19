@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# -------------------------------------------------
+#  Append a source line for the dotfiles profile
+#  to the appropriate startup file (bash or zsh)
+#  in an idempotent way.
+# -------------------------------------------------
+
+# The line to add
+LINE='source ~/dotfiles/.casey_profile'
+
+# Detect the current shell
+case "$SHELL" in
+    */bash)  TARGET="$HOME/.bash_profile" ;;
+    */zsh)   TARGET="$HOME/.zshrc" ;;
+    *)       echo "Unsupported shell: $SHELL" >&2; exit 1 ;;
+esac
+
+# Ensure the target file exists
+touch "$TARGET"
+
+# Append only if the line is not already present
+if ! grep -Fxq "$LINE" "$TARGET"; then
+    echo "$LINE" >> "$TARGET"
+    echo "Added to $TARGET"
+else
+    echo "Line already present in $TARGET"
+fi
+
