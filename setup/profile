@@ -10,7 +10,7 @@ LINE='source ~/dotfiles/.casey_profile'
 
 # Detect the current shell
 case "$SHELL" in
-    */bash)  TARGET="$HOME/.bash_profile" ;;
+    */bash)  TARGET="$HOME/.bashrc" ;;
     */zsh)   TARGET="$HOME/.zshrc" ;;
     *)       echo "Unsupported shell: $SHELL" >&2; exit 1 ;;
 esac
