@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# =============================================================================
+# Creates: ~/.sqliterc -> dotfiles/.sqliterc
+# Usage: bash setup/sqlite [/path/to/dotfiles/repo]
+# Idempotent: Safe to rerun.
+# =============================================================================
+
+set -e
+
+SETUP_DIR="$(cd "$(dirname "$0")" && pwd)"
+source "${SETUP_DIR}/utils"
+
+DOTFILES="${1:-$(dirname "$SETUP_DIR")}"
+
+# --- Symlink -----------------------------------------------------------------
+
+make_symlink "${DOTFILES}/sqliterc" "${HOME}/.sqliterc"

@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+# =============================================================================
+# Creates: ~/.casey_profile -> dotfiles/.casey_profile
+#          ~/.casey_profile_zsh -> dotfiles/.casey_profile_zsh
+#          ~/.secrets
+# Injects: source ~/.casey_profile  into shell rc file
+# Usage: bash setup/shell_profile [/path/to/dotfiles/repo]
+# Idempotent: Safe to rerun.
+# =============================================================================
+
+set -e
+
+SETUP_DIR="$(cd "$(dirname "$0")" && pwd)"
+source "${SETUP_DIR}/utils"
+
+DOTFILES="${1:-$(dirname "$SETUP_DIR")}"
+
+# --- Symlinks ----------------------------------------------------------------
+
+make_symlink "${DOTFILES}/casey_profile"     "${HOME}/.casey_profile"
+make_symlink "${DOTFILES}/casey_profile_zsh" "${HOME}/.casey_profile_zsh"
+
+# --- Secrets file ------------------------------------------------------------
+
+SECRETS_FILE="${HOME}/.secrets"
+touch "${SECRETS_FILE}"
+chmod 600 "${SECRETS_FILE}"
+inject_line "# Extension of .bash_profile or .zshrc to store credential env vars - export API_KEY=\"val\"" "${SECRETS_FILE}"
+
+# --- Shell rc injection ------------------------------------------------------
+
+case "$SHELL" in
+    */zsh)
+        RC="${HOME}/.zshrc"
+        inject_line "source ~/.casey_profile"     "$RC"
+        inject_line "source ~/.casey_profile_zsh" "$RC"
+        inject_line "source ~/.secrets"           "$RC"
+        log "Configured ~/.zshrc"
+        ;;
+    */bash)
+        RC="${HOME}/.bash_profile"
+        inject_line "source ~/.casey_profile" "$RC"
+        inject_line "source ~/.secrets".      "$RC"
+        log "Configured ~/.bash_profile"
+        ;;
+    *)
+        warn "Unrecognised shell: $SHELL"
+        warn "Manually add to your shell rc:  source ~/.casey_profile"
+        ;;
+esac

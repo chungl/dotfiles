@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+# =============================================================================
+# Utilities for setup scripts
+# Usage: source "${SETUP_DIR}/utils"
+# Compatible with bash and zsh.
+# =============================================================================
+
+DEFAULT_SCRIPT_NAME="dotfiles setup"
+log()  { printf '[%s] %s\n' "${LOGGER_SCRIPT_NAME:-$DEFAULT_SCRIPT_NAME}" "$*"; }
+warn() { printf '[%s] ⚠️ WARNING: %s\n' "${LOGGER_SCRIPT_NAME:-$DEFAULT_SCRIPT_NAME}" "$*" >&2; }
+err()  { printf '[%s] 🛑 ERROR: %s\n' "${LOGGER_SCRIPT_NAME:-$DEFAULT_SCRIPT_NAME}" "$*" >&2; exit 1; }
+
+# make_symlink <to> <from> // tgt(from) -> src(to)
+# Creates tgt -> src. Updates wrong symlinks. 
+# Confirms tgt exists. Backs up existing regular files.
+make_symlink() {
+    local src="$1" tgt="$2"
+    if [[ ! -e "$src" ]]; then
+        err "Unable to create symlink $tgt -> $src. Source does not exist"
+    fi
+    if [[ -L "$tgt" ]]; then
+        if [[ "$(readlink "$tgt")" == "$src" ]]; then
+            log "Symlink exists: $tgt -> $src"
+            return
+        else
+            warn "Updating symlink: $tgt -> $src (was -> $(readlink "$tgt"))"
+            rm "$tgt"
+        fi
+    elif [[ -e "$tgt" ]]; then
+        warn "Replacing existing file: ${tgt}. Created backup at ${tgt}.bak"
+        mv "$tgt" "${tgt}.bak"
+    fi
+    ln -s "$src" "$tgt"
+    log "Symlinked: $tgt -> $src"
+}
+
+# inject_line <line> <file>
+# Appends line to file if not already present (exact whole-line match).
+inject_line() {
+    local line="$1" file="$2"
+    touch "$file"
+    if grep -Fxq "$line" "$file"; then
+        log "Already present in $file: $line"
+    else
+        printf '%s\n' "$line" >> "$file"
+        log "Injected into $file: $line"
+    fi
+}
+
+# clone_or_pull <repo> <dest>
+# Clones repo to dest, or pulls if it already exists.
+clone_or_pull() {
+    local repo="$1" dest="$2"
+    if [[ -d "${dest}/.git" ]]; then
+        log "Updating $(basename "$dest")..."
+        git -C "$dest" pull --quiet
+    else
+        log "Cloning $(basename "$dest")..."
+        git clone --depth=1 "$repo" "$dest"
+    fi
+}

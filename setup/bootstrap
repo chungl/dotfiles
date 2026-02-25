@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# =============================================================================
+# Orchestrates a full dotfiles install/update
+#
+# Usage: bash setup/bootstrap.sh [/path/to/dotfiles/repo]
+# Idempotent: Safe to rerun.
+# =============================================================================
+
+set -e
+
+LOGGER_SCRIPT_NAME="bootstrap"
+
+SETUP_DIR="$(cd "$(dirname "$0")" && pwd)"
+source "${SETUP_DIR}/utils"
+
+DOTFILES_REPO="https://github.com/chungl/dotfiles"
+DOTFILES="${1:-${HOME}/code/dotfiles}"
+
+# --- Clone if needed ---------------------------------------------------------
+
+if [[ ! -d "${DOTFILES}/.git" ]]; then
+    log "Cloning dotfiles repo to ${DOTFILES}..."
+    mkdir -p "$(dirname "$DOTFILES")"
+    git clone "$DOTFILES_REPO" "$DOTFILES"
+else
+    log "Repo already present at ${DOTFILES}"
+fi
+
+# --- Install config files ----------------------------------------------------
+
+bash "${SETUP_DIR}/shell_profile" "$DOTFILES"
+bash "${SETUP_DIR}/git"           "$DOTFILES"
+bash "${SETUP_DIR}/vim"           "$DOTFILES"
+bash "${SETUP_DIR}/sqlite"        "$DOTFILES"
+
+# --- Install software --------------------------------------------------------
+bash "${SETUP_DIR}/zsh"           "$DOTFILES"
+
+# --- Done --------------------------------------------------------------------
+
+log "Bootstrap complete. Source your shell profile to apply changes."

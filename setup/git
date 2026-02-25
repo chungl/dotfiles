@@ -1,10 +1,37 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# =============================================================================
+# Creates:  ~/.casey_git -> dotfiles/.gitconfig
+# Injects:  [include] path = ~/.casey_git  into ~/.gitconfig
+# Usage: bash setup/git [/path/to/dotfiles/repo]
+# Idempotent: Safe to rerun.
+# =============================================================================
 
-CONFIG_PATH=~/.gitconfig
-DOTFILES_PATH=~/dotfiles
-touch $CONFIG_PATH
-cat <<EOT >> $CONFIG_PATH
-[INCLUDE]
-	path = "$DOTFILES_PATH/.gitconfig" 
-EOT
+set -e
 
+LOGGER_SCRIPT_NAME="git setup"
+
+SETUP_DIR="$(cd "$(dirname "$0")" && pwd)"
+source "${SETUP_DIR}/utils"
+
+DOTFILES="${1:-$(dirname "$SETUP_DIR")}"
+
+CONFIG_ROOT="${HOME}/.gitconfig"
+SYMLINK_TARGET="${HOME}/.casey_git"
+CONFIG_SRC="${DOTFILES}/gitconfig"
+
+# --- Symlink -----------------------------------------------------------------
+
+make_symlink "$CONFIG_SRC" "$SYMLINK_TARGET"
+
+# --- Inject include into ~/.gitconfig ----------------------------------------
+
+touch $CONFIG_ROOT
+
+# inject_line does an exact whole-line match, so we need to inject the block
+# as it will appear in the file. Git config includes use a tab-indented key.
+if grep -Fxq "	path = ~/.casey_git" "${HOME}/.gitconfig"; then
+    log "Include already present in ~/.gitconfig"
+else
+    printf '\n[include]\n\tpath = ~/.casey_git\n' >> "${HOME}/.gitconfig"
+    log "Configured ~/.gitconfig"
+fi

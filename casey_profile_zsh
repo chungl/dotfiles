@@ -1,0 +1,34 @@
+# =============================================================================
+# zsh-specific settings, plugins, and prompt configuration.
+# =============================================================================
+# --- zsh history options -----------------------------------------------------
+
+setopt HIST_IGNORE_DUPS   # don't record duplicate consecutive commands
+setopt HIST_IGNORE_SPACE  # commands prefixed with a space are not saved
+                          # (useful for one-off secrets: " AWS_TOKEN=xxx cmd")
+setopt SHARE_HISTORY      # share history across simultaneous shell sessions
+setopt HIST_VERIFY        # show expanded history substitution before executing
+
+# --- Plugins (sourced only if installed) -------------------------------------
+# Dependencies are installed via setup/zsh
+
+ZSH_PLUGIN_DIR="${HOME}/.zsh"
+
+if [[ -f "${ZSH_PLUGIN_DIR}/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
+    source "${ZSH_PLUGIN_DIR}/zsh-autosuggestions/zsh-autosuggestions.zsh"
+    ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
+    ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+fi
+
+if [[ -f "${ZSH_PLUGIN_DIR}/zsh-history-substring-search/zsh-history-substring-search.zsh" ]]; then
+    source "${ZSH_PLUGIN_DIR}/zsh-history-substring-search/zsh-history-substring-search.zsh"
+    # Bind up/down arrows — two forms to cover different terminal emulators
+    bindkey '^[[A' history-substring-search-up
+    bindkey '^[[B' history-substring-search-down
+    bindkey "$terminfo[kcuu1]" history-substring-search-up
+    bindkey "$terminfo[kcud1]" history-substring-search-down
+fi
+
+# --- fzf (zsh) ---------------------------------------------------------------
+
+[[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh

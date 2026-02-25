@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+# =============================================================================
+# Installs: zsh plugins and fzf
+# Usage: bash setup/zsh [/path/to/dotfiles/repo]
+# Idempotent: Safe to rerun.
+# =============================================================================
+
+set -e
+
+LOGGER_SCRIPT_NAME="zsh extensions"
+
+SETUP_DIR="$(cd "$(dirname "$0")" && pwd)"
+source "${SETUP_DIR}/utils"
+
+DOTFILES="${1:-$(dirname "$SETUP_DIR")}"
+
+ZSH_PLUGIN_DIR="${ZSH_PLUGIN_DIR:-$HOME/.zsh}"
+mkdir -p "$ZSH_PLUGIN_DIR"
+
+# --- zsh-autosuggestions -----------------------------------------------------
+
+clone_or_pull \
+    https://github.com/zsh-users/zsh-autosuggestions \
+    "${ZSH_PLUGIN_DIR}/zsh-autosuggestions"
+
+# --- zsh-history-substring-search --------------------------------------------
+
+clone_or_pull \
+    https://github.com/zsh-users/zsh-history-substring-search \
+    "${ZSH_PLUGIN_DIR}/zsh-history-substring-search"
+
+# --- fzf ---------------------------------------------------------------------
+
+if command -v fzf &>/dev/null; then
+    log "fzf already installed ($(fzf --version))"
+elif command -v brew &>/dev/null; then
+    log "Installing fzf via brew..."
+    brew install fzf
+else
+    log "Installing fzf via git..."
+    clone_or_pull https://github.com/junegunn/fzf.git "${HOME}/.fzf"
+    "${HOME}/.fzf/install" --all --no-bash --no-fish
+fi
+
+# --- Done --------------------------------------------------------------------
+
+log "Completed zsh setup. Run: source ~/.zshrc"

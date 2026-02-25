@@ -1,3 +1,5 @@
+# --- Git aliases -------------------------------------------------------------
+
 # git status
 alias gs="printf \"
                                                               ____,
@@ -33,41 +35,39 @@ alias gdc="printf \"
                                 ▌     ▚▄▄▄▄▄▌      █████████████████████ ▌ <                              ▏\    \    \\ 
 ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
 \"; git diff --cached"
+
 alias gpsu="git push --set-upstream origin \$(git rev-parse --abbrev-ref HEAD)"
 alias ghsh="git rev-parse --short HEAD"
 
-# git graph
 alias gg="git log --all --graph --tags --oneline"
 alias ggb="git log HEAD --graph --tags --oneline"
 
-# git diff file
 alias gdf="git log --follow -c -- "
 # git count lines
 alias gcl="git ls-files imports/* | xargs wc -l"
-
-# git branch list
-alias gbl="git branch --list --sort -creatordate --no-merged"
-
-# git checkout
+alias gbl="git branch --list --sort=-creatordate --no-merged"
 alias go="git checkout"
 alias gob="git checkout -b"
 
-# git pull
 alias gfp="git fetch && git pull"
+
 
 alias hosts="sudo vim /etc/hosts"
 alias resethosts="rm ~/.ssh/known_hosts"
+
+# Mac specific
+alias flushdns="sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
 alias whichport="sudo lsof -i -P | grep LISTEN | grep "
-
-# git merge
-# git merge main/master
-alias gmm="git checkout \$([[ \"$PWD\" =~ \\/extension-page(\\/|$) ]] && echo \"main\" || echo \"master\") && 
-git fetch &&
-git pull && 
-git checkout - &&
-git merge --no-edit \$([[ \"$PWD\" =~ \\/extension-page(\\/|$) ]] && echo \"main\" || echo \"master\")"
-
 
 # alias
 alias al="vim ~/.casey_profile && source ~/.casey_profile"
 
+HISTSIZE=50000
+HISTFILESIZE=50000  # bash
+SAVEHIST=50000      # zsh
+
+# fzf - Fuzzy history search
+if [[ -n "$BASH_VERSION" && -f ~/.fzf.bash ]]; then
+    source ~/.fzf.bash
+fi
+# zsh fzf is sourced in .casey_profile_zsh
