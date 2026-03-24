@@ -51,13 +51,18 @@ alias gob="git checkout -b"
 
 alias gfp="git fetch && git pull"
 
+alias tf="terraform"
+
 
 alias hosts="sudo vim /etc/hosts"
 alias resethosts="rm ~/.ssh/known_hosts"
 
+function lsr() { ls -tr ${2:-.} | tail -n ${1:-5}; }
+
 # Mac specific
 alias flushdns="sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
 alias whichport="sudo lsof -i -P | grep LISTEN | grep "
+alias mntscratch="sshfs root@192.168.4.152:/store/scratch ~/data/homelab"
 
 # alias
 alias al="vim ~/.casey_profile && source ~/.casey_profile"

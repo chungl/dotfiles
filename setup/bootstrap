@@ -14,7 +14,7 @@ SETUP_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "${SETUP_DIR}/utils"
 
 DOTFILES_REPO="https://github.com/chungl/dotfiles"
-DOTFILES="${1:-${HOME}/code/dotfiles}"
+DOTFILES="${1:-${HOME}/dotfiles}"
 
 # --- Clone if needed ---------------------------------------------------------
 
