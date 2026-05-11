@@ -62,6 +62,7 @@ nnoremap <S-l> :BufSurfForward<CR>
 nnoremap <leader>bd :BufSurfBack<CR>:Bdelete #<CR>
 
 command! -nargs=1 HelmValues execute 'enew | file helm/<args> | read !helm show values <args>' | execute '1d' | execute 'setlocal nomodifiable'
+command! -nargs=1 HelmLatest execute 'normal! a' . system('helm-latest ' . <q-args>)
 " TODO: depends on .zshenv, does not load .zshrc. 
 " WARN: Currently needs manual install/sync
 command! -nargs=* Bcalb execute 'normal! a' . system('bcalb ' . <q-args>)

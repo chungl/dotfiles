@@ -70,6 +70,8 @@ alias openclaw-edit="kubectl exec -it deploy/openclaw -n clawd -c editor -- bash
 alias openclaw-tun-start="launchctl load ~/Library/LaunchAgents/com.casey.openclaw-tunnel.plist"
 alias openclaw-tun-stop="launchctl unload ~/Library/LaunchAgents/com.casey.openclaw-tunnel.plist"
 
+alias mas-cli="kn matrix exec -it deploy/matrix-matrix-authentication-service -c matrix-authentication-service -- mas-cli"
+
 function lsr() { ls -tr ${2:-.} | tail -n ${1:-5}; }
 function vimswap() { find $1 -type f -name '.*.sw?' }
 
